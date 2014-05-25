@@ -52,6 +52,7 @@ float knotsToMPH = 1.15077945; // knots to mph
 int hoursToSeconds = 3600; // hours to seconds
 float delta_t; 
 float distanceTraveledInMiles = 0.0;
+float speeds[10
 
 
 void setup()  
@@ -153,7 +154,11 @@ void loop() {                   // run over and over again
     if (GPS.fix) {
 //      distanceTraveledInMiles = GPS.speed*knotsToMPH/hoursToSeconds*delta_t;
         distanceTraveledInMiles = distanceTraveledInMiles+GPS.speed*knotsToMPH/hoursToSeconds*delta_t;
-        Serial.print(distanceTraveledInMiles);
+        Serial.print("Distance Traveled"); Serial.println(distanceTraveledInMiles);
+        Serial.print("Speed (knots)"); Serial.println(GPS.speed);
+        Serial.print("Knots to mph"); Serial.println(knotsToMPH);
+        Serial.print("Hours to seconds"); Serial.println(hoursToSeconds);
+        Serial.print("delta t"); Serial.println(delta_t);
     }
   
   }
