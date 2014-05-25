@@ -58,6 +58,7 @@ int currentLEDIndex = 0; //also used as the next mile counter -- just add 1 to i
 const int minBrightness = 0;
 const int maxBrightness = 255;
 float brightness = 0.0;
+int LEDsSize = sizeof(LEDs)/sizeof(int);
 
 void setup()  
 {
@@ -97,7 +98,7 @@ void setup()
   //my code
   
   //Make pinmodes of LEDs as outputs  
-  for (int i=0; i<sizeof(LEDs)/sizeof(int); i++) {
+  for (int i=0; i<LEDsSize; i++) {
    pinMode(LEDs[i], OUTPUT);
   }
   
@@ -175,11 +176,21 @@ void loop() {                   // run over and over again
         Serial.println(" ");
         
         //for LEDs
+        
         brightness = maxBrightness*(distanceTraveledInMiles-currentLEDIndex);
-        if ( distanceTraveledInMiles >= (float) (currentLEDIndex+1) ) {
-          currentLEDIndex++;          
+        if ( currentLEDIndex < LEDsSize ) { // if you stil haven't met your millage goal
+          if ( distanceTraveledInMiles >= (float) (currentLEDIndex+1) ) currentLEDIndex++;
+          analogWrite(LEDs[currentLEDIndex], (int) brightness);
         }
-        analogWrite(LEDs[currentLEDIndex], (int) brightness);
+        else { //if you have met your millage gaol
+          while(true) {
+            for (int i=0; i<LEDsSize; i++) analogWrite(LEDs[i], minBrightness);
+            delay(500);
+            for (int i=0; i<LEDsSize; i++) analogWrite(LEDs[i], maxBrightness);
+            delay(500);
+          }
+        }
+        
         //end LED code
         
     }
