@@ -52,8 +52,12 @@ float knotsToMPH = 1.15077945; // knots to mph
 int hoursToSeconds = 3600; // hours to seconds
 float delta_t; 
 float distanceTraveledInMiles = 0.0;
-float speeds[10
-
+float speeds[10];
+const int LEDs[4] = {5, 6, 9, 10};
+int currentLEDIndex = 0; //also used as the next mile counter -- just add 1 to it (ex. nextMile = currentLEDIndex+1)
+const int minBrightness = 0;
+const int maxBrightness = 255;
+float brightness = 0.0;
 
 void setup()  
 {
@@ -89,6 +93,14 @@ void setup()
   delay(1000);
   // Ask for firmware version
   mySerial.println(PMTK_Q_RELEASE);
+  
+  //my code
+  
+  //Make pinmodes of LEDs as outputs  
+  for (int i=0; i<sizeof(LEDs)/sizeof(int); i++) {
+   pinMode(LEDs[i], OUTPUT);
+  }
+  
 }
 
 
@@ -155,10 +167,21 @@ void loop() {                   // run over and over again
 //      distanceTraveledInMiles = GPS.speed*knotsToMPH/hoursToSeconds*delta_t;
         distanceTraveledInMiles = distanceTraveledInMiles+GPS.speed*knotsToMPH/hoursToSeconds*delta_t;
         Serial.print("Distance Traveled"); Serial.println(distanceTraveledInMiles);
-        Serial.print("Speed (knots)"); Serial.println(GPS.speed);
-        Serial.print("Knots to mph"); Serial.println(knotsToMPH);
-        Serial.print("Hours to seconds"); Serial.println(hoursToSeconds);
+        Serial.print("Speed (mph)"); Serial.println(GPS.speed*knotsToMPH);
+        Serial.print("Brightness [float]"); Serial.println(brightness);
+        Serial.print("Brightness [int]"); Serial.println((int) brightness);
+        Serial.print("Current LED Index (float)"); Serial.println(currentLEDIndex);
         Serial.print("delta t"); Serial.println(delta_t);
+        Serial.println(" ");
+        
+        //for LEDs
+        brightness = maxBrightness*(distanceTraveledInMiles-currentLEDIndex);
+        if ( distanceTraveledInMiles >= (float) (currentLEDIndex+1) ) {
+          currentLEDIndex++;          
+        }
+        analogWrite(LEDs[currentLEDIndex], (int) brightness);
+        //end LED code
+        
     }
   
   }
