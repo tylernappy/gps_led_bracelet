@@ -148,10 +148,12 @@ void loop() {                   // run over and over again
   if (millis() - timer > 2000) { 
     delta_t = (millis() - timer)*0.001; // time between last reading and now (0.001 is to change from 1000 format to 1.000 format)
     timer = millis(); // reset the timer
+    if (!GPS.fix) Serial.println("didn't fix to satellite");
 
     if (GPS.fix) {
 //      distanceTraveledInMiles = GPS.speed*knotsToMPH/hoursToSeconds*delta_t;
-        distanceTraveledInMiles = distanceTravledInMiles+GPS.speed*knotsToMPH/hoursToSeconds*delta_t;
+        distanceTraveledInMiles = distanceTraveledInMiles+GPS.speed*knotsToMPH/hoursToSeconds*delta_t;
+        Serial.print(distanceTraveledInMiles);
     }
   
   }
