@@ -51,9 +51,9 @@ void useInterrupt(boolean); // Func prototype keeps Arduino 0023 happy
 float knotsToMPH = 1.15077945; // knots to mph
 int hoursToSeconds = 3600; // hours to seconds
 float delta_t; 
-float distanceTraveledInMiles = 0.0;
-float speeds[10];
-const int LEDs[4] = {5, 6, 9, 10};
+float distanceTraveledInMiles = 0.0; //increases as user goes farther
+// float speeds[10]; // array of speeds -- currently taken out
+const int LEDs[5] = {5, 6, 9, 10, 11};
 int currentLEDIndex = 0; //also used as the next mile counter -- just add 1 to it (ex. nextMile = currentLEDIndex+1)
 const int minBrightness = 0;
 const int maxBrightness = 255;
